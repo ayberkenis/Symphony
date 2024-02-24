@@ -2,6 +2,11 @@
 
 #### This is the HTTP Rest API Server for Fortuna
 
+This has been developed to serve HTTP request for Fortuna API. It probably will be open-sourced.
+
+- Extremely Fast
+- Minimal dependencies
+
 ```py
 
 server = FortunaAPI()
