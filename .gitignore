@@ -12,3 +12,6 @@ core/__pycache__/response.cpython-312.pyc
 core/__pycache__/server.cpython-312.pyc
 auth/__pycache__/routes.cpython-312.pyc
 __pycache__/main.cpython-312.pyc
+build
+dist
+web_symphony.egg-info

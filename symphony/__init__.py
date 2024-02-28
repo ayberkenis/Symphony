@@ -30,16 +30,33 @@ class FortunaAPI:
         return [response.body]
 
     def endpoint(self, path: str, method: BaseMethod):
+        """This decorator is used to register a function as a route.
+
+        Args:
+            path (str): Path of the route
+            method (BaseMethod): HTTP method of the route
+        """
         def decorator(func):
             self.context.add_route(path, method, func)
             return func
         return decorator
 
     def register_module(self, module: Module):
+        """This method is used to register a module to the application.
+
+        Args:
+            module (Module): Module to be registered
+        """
         for rule, f, options in module.routes:
             self.context.add_route(rule, f, options)
 
     def run(self, host: str = None, port: int = None):
+        """This method is used to start the server.
+
+        Args:
+            host (str, optional): Hostname to run symphony on. Defaults to None.
+            port (int, optional): Port to run symphony on. Defaults to None.
+        """
         try:
             self.host = host if host else self.host
             self.port = port if port else self.port
