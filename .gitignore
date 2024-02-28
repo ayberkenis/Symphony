@@ -1,1 +1,14 @@
 /venv
+symphony/__pycache__/__init__.cpython-312.pyc
+symphony/__pycache__/
+core/__pycache__/ctx.cpython-312.pyc
+core/__pycache__/exceptions.cpython-312.pyc
+core/__pycache__/methods.cpython-312.pyc
+core/__pycache__/monitor.cpython-312.pyc
+core/__pycache__/msc.cpython-312.pyc
+core/__pycache__/reload.cpython-312.pyc
+core/__pycache__/request.cpython-312.pyc
+core/__pycache__/response.cpython-312.pyc
+core/__pycache__/server.cpython-312.pyc
+auth/__pycache__/routes.cpython-312.pyc
+__pycache__/main.cpython-312.pyc

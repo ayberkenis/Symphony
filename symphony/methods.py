@@ -31,13 +31,8 @@ class Methods:
         self.Redirect = Redirect
         self.View = View
 
-    def get_method(self, method: typing.Union[str, BaseMethod]) -> BaseMethod:
-        if method is str:
-            return getattr(self, method.upper())
-        if isinstance(method, BaseMethod):
-            return method        
-        if method.upper() not in self.__dict__:
-            raise AttributeError(f"Method {method} not found.")
+    def get_method(self, method: str) -> BaseMethod:
+        return getattr(self, method.upper())        
 
     def all_methods(self) -> typing.List[str]:
         return [method for method in self.__dict__ if not method.startswith('_')]

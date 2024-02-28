@@ -6,7 +6,7 @@ class NotFoundError(OutgoingResponse):
     
 class MethodNotAllowedError(OutgoingResponse):
     def __init__(self):
-        super().__init__(data={"message": "Method not allowed."}, status=405)
+        super().__init__(data={"message": "Method not allowed.",}, status=405)
 
 class ServerError(OutgoingResponse):
     def __init__(self, details: str = None):

@@ -6,9 +6,9 @@ This has been developed to serve HTTP request for Fortuna API. It probably will 
 
 - Extremely Fast
 - Minimal dependencies
+- Deploy in seconds
 
 ```py
-
 server = FortunaAPI()
 
 @server.endpoint('/', server.methods.POST)
@@ -18,5 +18,14 @@ def index(request):
 # this will return below
 
 # {'message': 'YES'}
-
 ```
+
+##
+
+### Automatically Add Microservices
+
+All folders in the current working directory are imported as routes and all routes have their own microservices.
+
+### Deployment
+
+It has been developed for special needs. Uvicorn ASGI will be used to deploy the App to production.
