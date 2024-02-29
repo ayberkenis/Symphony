@@ -26,7 +26,6 @@ class WebSymphony:
         self.methods = Methods()
         self.reloader = Reloader(self.server, reload)
         self.base_port = 29000
-        self.config = AppConfig(self.context)
 
     def __call__(self, environ, start_response):
         request = IncomingRequest(environ)
@@ -56,6 +55,18 @@ class WebSymphony:
         """
         for rule, f, options in module.routes:
             self.context.add_route(rule, f, options)
+
+    def before_serving(self, func):
+        """Register a function to be called before serving.
+        This is useful for running background tasks before the server starts serving.
+
+        This is a decorator method.
+
+        Args:
+            func (callable): The function to be called.
+        """
+
+        self.server.before_serving(func)
 
     def while_serving(self, func):
         """Register a function to be called while serving.

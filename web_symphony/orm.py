@@ -1,6 +1,9 @@
 import typing as t
 import logging
 from .db import PostgreSQL, MySQL, SQLite
+import importlib.util
+import sys
+from colored import Fore, Style
 
 
 class ORM:
@@ -34,6 +37,7 @@ class ORM:
     @property
     def engine(self) -> str:
         if self._engine == "postgres":
+
             return PostgreSQL(
                 self.host, self.port, self.username, self.password, self.database
             )
@@ -43,14 +47,41 @@ class ORM:
             )
         return SQLite(self.database)
 
+    def _check_installed(self, package: str) -> None:
+        if importlib.util.find_spec(package) is None:
+            self.logger.error(
+                f"{Fore.RED}You have tried to connect to a database without having {package} installed. Install it, after you'll be able to connect.{Style.RESET}"
+            )
+            sys.exit(1)
+
     def connect(self) -> t.Any:
         """Initialize the connection to the database.
 
         Returns:
             t.Any: Connection object
 
+        """
+
+        if self._engine == "postgres":
+            self._check_installed("psycopg2")
+        elif self._engine == "mysql":
+            self._check_installed("mysql-connector-python")
+        elif self._engine == "sqlite":
+            self._check_installed("sqlite3")
+
+        return self.engine.connect()
+
+    def execute(self, query: str) -> t.Any:
+        """Execute a query.
+
+        Args:
+            query (str): The query to be executed.
+
+        Returns:
+            t.Any: The result of the query.
 
         """
+        return self.engine.execute(query)
 
 
 class Model:

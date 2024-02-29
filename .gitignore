@@ -19,3 +19,5 @@ web_symphony.egg-info
 examples/v1/__pycache__
 examples/v1/__pycache__/
 examples/v1/__pycache__/routes.cpython-312.pyc
+examples/.env
+web_symphony/db/__pycache__/
