@@ -22,6 +22,12 @@ server.context.config.set_database(
 
 @server.before_serving
 def before_serving():
+    """
+    This function is called before serving the application
+
+    It can be used to perform any operation before the server starts serving, such as connecting to a database.
+    """
+
     server.context.database.connect()
 
 
@@ -32,7 +38,9 @@ def index(request):
 
 @server.endpoint("/about", server.methods.GET)
 def about(request):
-    users = server.context.database.execute("SELECT * FROM users")
+    users = server.context.database.execute(
+        "SELECT * FROM users"
+    )  # This is an example of executing a query
     return {"message": "This is about endpoint.", "path": request.path, "users": users}
 
 
