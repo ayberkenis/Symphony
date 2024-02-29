@@ -22,6 +22,9 @@ class HTTPServer:
         if not self.logger.hasHandlers():
             self.logger.addHandler(logging.StreamHandler())
         self.initialize_socket()
+        self.while_serving_methods = []
+        self.before_serving_methods = []
+        
 
 
     @timer
@@ -44,6 +47,31 @@ class HTTPServer:
             if self.socket:
                 self.socket.close()
 
+    def while_serving(self, func: callable) -> None:
+        """ Register a function to be called while serving.
+        This is useful for running background tasks while the server is running and serving.
+
+        This is method is defined as a decorator in the WebSymphony class.
+
+        Args:
+            func (callable): The function to be called.
+
+        """
+        self.while_serving_methods.append(func)
+
+    def before_serving(self, func: callable) -> None:
+        """ Register a function to be called before serving.
+        This is useful for running background tasks before the server starts serving.
+
+        This is method is defined as a decorator in the WebSymphony class.
+
+        Args:
+            func (callable): The function to be called.
+
+        """
+        self.before_serving_methods.append(func)
+
+
     def _serve_forever(self):
         with self.socket as server_socket:
             server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -61,6 +89,9 @@ class HTTPServer:
                             request = client_connection.recv(1024).decode()
                             response = self.handle_request(request)
                             try:
+                                for method in self.while_serving_methods:
+                                    method()
+
                                 if isinstance(response, OutgoingResponse):
                                     client_connection.sendall(response.__bytes__())
                                 elif isinstance(response, bytes):

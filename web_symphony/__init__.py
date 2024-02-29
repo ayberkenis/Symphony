@@ -6,22 +6,27 @@ from .methods import Methods, BaseMethod
 from .reload import Reloader
 from .ctx import AppContext
 from .msc import Module
-import importlib.util
+from .config import AppConfig
+import typing as t
 import sys
 import os
 
 sys.path.insert(0, os.getcwd())
 
-class FortunaAPI:
-    def __init__(self, reload: bool =False) -> None:
-        self.logger = logging.getLogger('fortuna')
+
+class WebSymphony:
+    def __init__(
+        self, host: str = "localhost", port: int = 9000, reload: bool = False
+    ) -> None:
+        self.logger = logging.getLogger("fortuna")
         self.context = AppContext()
-        self.host: str = 'localhost'
-        self.port: int = 5000
+        self.host = host
+        self.port = port
         self.server: HTTPServer = HTTPServer(self.host, self.port, self, self.context)
         self.methods = Methods()
         self.reloader = Reloader(self.server, reload)
         self.base_port = 29000
+        self.config = AppConfig(self.context)
 
     def __call__(self, environ, start_response):
         request = IncomingRequest(environ)
@@ -36,9 +41,11 @@ class FortunaAPI:
             path (str): Path of the route
             method (BaseMethod): HTTP method of the route
         """
+
         def decorator(func):
             self.context.add_route(path, method, func)
             return func
+
         return decorator
 
     def register_module(self, module: Module):
@@ -49,6 +56,22 @@ class FortunaAPI:
         """
         for rule, f, options in module.routes:
             self.context.add_route(rule, f, options)
+
+    def while_serving(self, func):
+        """Register a function to be called while serving.
+        This is useful for running background tasks while the server is running and serving.
+
+        This is a decorator method.
+
+        Args:
+            func (callable): The function to be called.
+        """
+
+        def decorator(func):
+            self.server.while_serving(func)
+            return func
+
+        return decorator
 
     def run(self, host: str = None, port: int = None):
         """This method is used to start the server.
@@ -62,5 +85,5 @@ class FortunaAPI:
             self.port = port if port else self.port
             self.server.serve_forever()
         except KeyboardInterrupt:
-            self.logger.info('Server has been terminated.')
+            self.logger.info("Server has been terminated.")
             self.server.socket.close()

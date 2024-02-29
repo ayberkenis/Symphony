@@ -1,4 +1,4 @@
-from symphony import Module
+from web_symphony import Module
 
 v1 = Module('v1', __name__)
 

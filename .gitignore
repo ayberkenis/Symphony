@@ -1,6 +1,7 @@
 /venv
 symphony/__pycache__/__init__.cpython-312.pyc
 symphony/__pycache__/
+web_symphony/__pycache__/
 core/__pycache__/ctx.cpython-312.pyc
 core/__pycache__/exceptions.cpython-312.pyc
 core/__pycache__/methods.cpython-312.pyc
@@ -15,3 +16,6 @@ __pycache__/main.cpython-312.pyc
 build
 dist
 web_symphony.egg-info
+examples/v1/__pycache__
+examples/v1/__pycache__/
+examples/v1/__pycache__/routes.cpython-312.pyc

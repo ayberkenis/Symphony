@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='web-symphony',
-    version='0.0.1',
+    version='0.0.2',
     packages=find_packages(),
     author="ayberkenis",
     author_email="ayberkenis@gmail.com",
@@ -18,7 +18,7 @@ setup(
     python_requires='>=3.9',
     repository="web-symphony",
     install_requires=[
-        "colored>=2.2.4",
+        "colored==2.2.4",
     ],
     
 )

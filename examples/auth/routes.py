@@ -1,6 +1,6 @@
-from symphony import FortunaAPI
+from web_symphony import Module
 
-server = FortunaAPI()
+server = Module('auth', __name__)
 
 @server.endpoint('/auth', server.methods.GET)
 def auth(request):
