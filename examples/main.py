@@ -41,7 +41,11 @@ def about(request):
     users = server.context.database.execute(
         "SELECT * FROM users"
     )  # This is an example of executing a query
-    return {"message": "This is about endpoint.", "path": request.path, "users": users}
+    return {
+        "message": "This is about endpoint.",
+        "path": str(request.path),
+        "users": users,
+    }
 
 
 server.register_module(v1)

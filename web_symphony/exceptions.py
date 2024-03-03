@@ -27,8 +27,8 @@ class ServerError(OutgoingResponse):
     def __init__(self, details: str = None):
         super().__init__(
             data={
-                "message": "An error occurred while processing the request.",
-                "details": details if details else None,
+                "message": "Internal Server Error.",
+                "details": "An error occurred while processing the request. Please try again later.",
             },
             status=500,
         )

@@ -1,4 +1,6 @@
 import logging
+
+import orjson
 from .server import HTTPServer
 from .request import IncomingRequest
 from .response import OutgoingResponse
@@ -10,6 +12,7 @@ from .config import AppConfig
 import typing as t
 import sys
 import os
+from .utils import jsoned
 
 sys.path.insert(0, os.getcwd())
 
@@ -33,7 +36,7 @@ class WebSymphony:
         start_response(response.status, response.headers)
         return [response.body]
 
-    def endpoint(self, path: str, method: BaseMethod):
+    def endpoint(self, path: str, method: BaseMethod) -> dict:
         """This decorator is used to register a function as a route.
 
         Args:
