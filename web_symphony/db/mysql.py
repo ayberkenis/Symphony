@@ -10,5 +10,6 @@ class MySQL(SQLClass):
         username: t.Optional[str] = None,
         password: t.Optional[str] = None,
         database: t.Optional[str] = None,
+        connection: t.Optional[t.Any] = None,
     ) -> None:
-        super().__init__(host, port, username, password, database)
+        super().__init__(host, port, username, password, database, connection)

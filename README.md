@@ -6,7 +6,7 @@ Web Symphony is the fastest\*, batteries-included REST framework for Python>=3.9
 
 #### What's included?
 
-- [ ] ORM
+- [x] ORM
 - [ ] Microservices
 - [ ] Model / Controllers
 - [ ] Websockets

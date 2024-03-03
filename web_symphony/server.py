@@ -6,7 +6,7 @@ from .request import IncomingRequest
 from .response import OutgoingResponse
 from .exceptions import NotFoundError, MethodNotAllowedError, ServerError
 import traceback
-from colored import Fore, Back, Style
+from colored import Fore, Style
 from typing import Union
 from .ctx import AppContext
 from .monitor import timer
@@ -30,9 +30,12 @@ class HTTPServer:
     @timer
     def initialize_socket(self):
         """Initialize the server socket."""
+
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def serve_forever(self):
+        for method in self.before_serving_methods:
+            method()
         try:
             self._serve_forever()
         except Exception as e:
@@ -81,8 +84,6 @@ class HTTPServer:
                 + Style.RESET
             )
 
-            for method in self.before_serving_methods:
-                method()
             while True:
                 try:
                     # Use select to wait for incoming connections with a timeout
@@ -101,9 +102,12 @@ class HTTPServer:
                                 elif isinstance(response, bytes):
                                     client_connection.sendall(response)
                                 else:
-                                    raise TypeError(
-                                        f"Expected bytes or OutgoingResponse, but got {type(response)}"
-                                    )
+                                    if response is None:
+                                        pass
+                                    else:
+                                        raise TypeError(
+                                            f"Expected bytes or OutgoingResponse, but got {type(response)}"
+                                        )
                             except Exception as e:
                                 print(traceback.format_exc())
                                 client_connection.sendall(

@@ -55,6 +55,7 @@ class WebSymphony:
         """
         for rule, f, options in module.routes:
             self.context.add_route(rule, f, options)
+        module._set_context(self.context)
 
     def before_serving(self, func):
         """Register a function to be called before serving.
@@ -65,7 +66,7 @@ class WebSymphony:
         Args:
             func (callable): The function to be called.
         """
-
+        self.logger.info(f"Registering before serving method: {func.__name__}")
         self.server.before_serving(func)
 
     def while_serving(self, func):

@@ -4,6 +4,8 @@ from .db import PostgreSQL, MySQL, SQLite
 import importlib.util
 import sys
 from colored import Fore, Style
+import string
+from .exceptions import FormattingNotAllowedError
 
 
 class ORM:
@@ -19,6 +21,7 @@ class ORM:
         host: t.Optional[str] = None,
         port: t.Optional[int] = None,
         database: t.Optional[str] = None,
+        connection: t.Optional[t.Any] = None,
     ) -> None:
         """Database engine for the ORM.
 
@@ -33,17 +36,28 @@ class ORM:
         self._engine = engine
         self.logger = logging.getLogger("fortuna-orm")
         self._connect_string = None
+        self.connection = connection
 
     @property
     def engine(self) -> str:
         if self._engine == "postgres":
 
             return PostgreSQL(
-                self.host, self.port, self.username, self.password, self.database
+                self.host,
+                self.port,
+                self.username,
+                self.password,
+                self.database,
+                self.connection,
             )
         elif self._engine == "mysql":
             return MySQL(
-                self.host, self.port, self.username, self.password, self.database
+                self.host,
+                self.port,
+                self.username,
+                self.password,
+                self.database,
+                self.connection,
             )
         return SQLite(self.database)
 
@@ -68,10 +82,10 @@ class ORM:
             self._check_installed("mysql-connector-python")
         elif self._engine == "sqlite":
             self._check_installed("sqlite3")
+        self.connection = self.engine.connect()
+        return self.connection
 
-        return self.engine.connect()
-
-    def execute(self, query: str) -> t.Any:
+    def execute(self, query: str, *args, **kwargs) -> t.Any:
         """Execute a query.
 
         Args:
@@ -81,7 +95,20 @@ class ORM:
             t.Any: The result of the query.
 
         """
-        return self.engine.execute(query)
+        return self.engine.execute(query, *args, **kwargs)
+
+    def execute_many(self, query: str, data: t.List[t.Tuple]) -> t.Any:
+        """Execute a query with many data.
+
+        Args:
+            query (str): The query to be executed.
+            data (t.List[t.Tuple]): The data to be inserted.
+
+        Returns:
+            t.Any: The result of the query.
+
+        """
+        return self.engine.execute_many(query, data)
 
 
 class Model:

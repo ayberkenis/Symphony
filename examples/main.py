@@ -21,7 +21,7 @@ server.context.config.set_database(
 
 
 @server.before_serving
-def before_serving():
+def setup_db():
     """
     This function is called before serving the application
 
