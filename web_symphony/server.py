@@ -9,7 +9,7 @@ import traceback
 from colored import Fore, Style
 from typing import Union
 from .ctx import AppContext
-from .monitor import timer
+from .utils import timer
 
 
 class HTTPServer:

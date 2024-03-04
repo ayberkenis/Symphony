@@ -1,4 +1,6 @@
+import time
 import functools
+import logging
 import colored
 import orjson
 
@@ -27,3 +29,20 @@ def jsoned(data: dict) -> bytes:
         OutgoingResponse: A response object
     """
     return orjson.loads(data)
+
+
+def timer(func):
+    """A decorator that prints the runtime of the decorated function."""
+    logger = logging.getLogger("fortuna")
+
+    @functools.wraps(func)
+    def wrapper_timer(*args, **kwargs):
+
+        start_time = time.time_ns()
+        value = func(*args, **kwargs)
+        end_time = time.time_ns()
+        run_time = end_time - start_time
+        logger.info(f"Finished {func.__name__!r} in {run_time} ns")
+        return value
+
+    return wrapper_timer
