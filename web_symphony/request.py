@@ -40,7 +40,13 @@ class IncomingRequest:
         return self.body
 
     def query(self) -> dict:
-        return self.body
+        """Parse the query parameters from the request string."""
+        query = self.path.split("?", 1)
+        if len(query) > 1:
+            query = query[1]
+            return {k: v for k, v in (q.split("=") for q in query.split("&"))}
+        else:
+            return {}
 
     def __repr__(self) -> str:
         return f"<IncomingRequest {self.method} {self.path} >"

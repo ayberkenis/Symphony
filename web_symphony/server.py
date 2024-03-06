@@ -23,6 +23,7 @@ class HTTPServer:
         self.logger = logging.getLogger("fortuna")
         if not self.logger.hasHandlers():
             self.logger.addHandler(logging.StreamHandler())
+        self.logger.setLevel(logging.INFO)
         self.initialize_socket()
         self.while_serving_methods = []
         self.before_serving_methods = []

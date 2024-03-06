@@ -3,6 +3,7 @@ import functools
 import logging
 import colored
 import orjson
+import typing as t
 
 
 def print_red(func):
@@ -18,11 +19,11 @@ def print_red(func):
     return print_red_wrapper
 
 
-def jsoned(data: dict) -> bytes:
+def jsoned(data: t.Union[bytes, str, dict, bytearray, memoryview]) -> bytes:
     """This method is used to return a JSON response.
 
     Args:
-        data (dict): Data to be returned
+        data (t.Union[bytes, str, dict, bytearray, memoryview]): The data to be returned.
         status (int, optional): Status code of the response. Defaults to 200.
 
     Returns:
@@ -42,7 +43,6 @@ def timer(func):
         value = func(*args, **kwargs)
         end_time = time.time_ns()
         run_time = end_time - start_time
-        logger.info(f"Finished {func.__name__!r} in {run_time} ns")
         return value
 
     return wrapper_timer

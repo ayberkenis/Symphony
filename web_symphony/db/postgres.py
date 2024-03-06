@@ -1,5 +1,6 @@
 import typing as t
 from .base import SQLClass
+import psycopg2
 from psycopg2 import connect, OperationalError, extensions
 from psycopg2.extras import RealDictCursor
 from colored import Fore, Style
@@ -42,14 +43,20 @@ class PostgreSQL(SQLClass):
 
     def execute(self, query: str) -> str:
         if not self.connection:
-            raise ValueError("You need to connect to the database first.")
-        cursor = self.connection.cursor()
-        cursor.execute(query)
-        self.connection.commit()
-        results = cursor.fetchall()
-        cursor.close()
-        # Serialize the list of dictionaries (rows) directly with orjson
-        return orjson.dumps(results).decode("UTF-8")
+            raise ValueError(
+                f"You have tried to execute without having an active connection to database."
+            )
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            self.connection.commit()
+            results = cursor.fetchall()
+            cursor.close()
+            # Serialize the list of dictionaries (rows) directly with orjson
+            return orjson.dumps(results).decode("UTF-8")
+        except Exception as e:
+            print(f"{Fore.RED}Error executing query: {e}{Style.RESET}")
+            return orjson.dumps({"error": "Internal Server Error."}).decode("UTF-8")
 
     def close(self) -> None:
         self.connection.close()
